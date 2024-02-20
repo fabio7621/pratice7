@@ -31,9 +31,9 @@
           <li class="nav-item">
             <router-link to="/admin/article" class="nav-link">貼文</router-link>
           </li>
-          <!-- <li class="nav-item">
-            <router-link class="nav-item">登出</router-link>
-          </li> -->
+          <li class="nav-item">
+            <a @click.prevent="logout()" class="nav-link">登出</a>
+          </li>
         </ul>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
@@ -49,7 +49,19 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods:{
+    logout() {
+      const api = `${import.meta.env.VITE_API}logout`;
+      this.$http.post(api)
+        .then((res) => {
+          console.log(res);
+          this.$router.push('/');
+        }).catch((error) => {
+          console.log(error);
+        });
+    },
+  }
+  
+};
 </script>
-
-<style></style>
