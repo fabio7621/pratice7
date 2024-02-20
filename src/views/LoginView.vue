@@ -54,7 +54,6 @@ export default {
   },
   methods: {
     login() {
-      this.$http;
       const api = `${import.meta.env.VITE_API}admin/signin`;
       this.$http
         .post(api, this.user)
