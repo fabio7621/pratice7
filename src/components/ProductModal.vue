@@ -209,19 +209,41 @@ import { Modal } from "bootstrap";
 export default {
 	data() {
 		return {
-			product: [],
 			pModal: null,
 		};
 	},
-	props: ["catchProduct", "isNew"],
+	props: ["product", "isNew"], //註記不要再data裡面放跟props一樣的名子
 	methods: {
 		openM() {
 			this.pModal.show();
 		},
+		closeM(){
+			this.pModal.hide();
+		},
+		updateProduct() {
+      const url = this.isNew
+        ? `${import.meta.env.VITE_API}/api/${import.meta.env.VITE_APIPATH}/admin/product`
+        : `${import.meta.env.VITE_API}/api/${import.meta.env.VITE_APIPATH}/admin/product/${this.product.id}`;
+
+      const httpMethod = this.isNew ? "post" : "put";
+
+      this.$http[httpMethod](url, { data: this.product })
+        .then((res) => {
+          alert(res.data.message);
+          this.closeM()
+          this.$emit("update");
+        })
+        .catch((error) => {
+          alert(error.res.data.message);
+        });
+    },
+    newImages() {
+      this.product.imagesUrl = [];
+      this.product.imagesUrl.push("");
+    },
 	},
 	mounted() {
 		this.pModal = new Modal(this.$refs.productModal);
-		this.product = this.catchProduct;
 	},
 };
 </script>
