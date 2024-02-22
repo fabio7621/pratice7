@@ -59,6 +59,8 @@
     </tbody>
   </table>
   <OrderModal :temp-order="tempOrder" ref="ordermodal"></OrderModal>
+  <DelModal ref="delbox" :item="tempOrder" @update="getOrder"></DelModal>
+  <pagination :pages="pagination" @emit-pages="getOrder"></pagination>
 </template>
 
 <script>
@@ -70,6 +72,7 @@ export default {
     return {
       orders: {},
       tempOrder: {},
+      pagination: {},
     };
   },
   methods: {
@@ -81,6 +84,7 @@ export default {
         .get(api)
         .then((res) => {
           this.orders = res.data.orders;
+          this.pagination = res.data.pagination;
         })
         .catch((err) => {
           alert("找不到資訊");
@@ -90,6 +94,7 @@ export default {
       this.$refs.ordermodal.openOderModal();
       this.tempOrder = { ...item };
     },
+    openDelOrderModal(item) {},
   },
   components: {
     DelModal,
