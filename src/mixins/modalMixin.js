@@ -11,5 +11,6 @@ export default {
   },
   mounted() {
     this.modal = new BsModal(this.$refs.modal);
-  },
+  }, //不一定要在data宣告modal,在這邊mounted宣告並直接賦予
+  //當然在data也可以先聲明modal只是會多一個步驟
 };
