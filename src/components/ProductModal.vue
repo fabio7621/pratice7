@@ -217,30 +217,34 @@ export default {
 		openM() {
 			this.pModal.show();
 		},
-		closeM(){
+		closeM() {
 			this.pModal.hide();
 		},
 		updateProduct() {
-      const url = this.isNew
-        ? `${import.meta.env.VITE_API}/api/${import.meta.env.VITE_APIPATH}/admin/product`
-        : `${import.meta.env.VITE_API}/api/${import.meta.env.VITE_APIPATH}/admin/product/${this.product.id}`;
+			const url = this.isNew
+				? `${import.meta.env.VITE_API}/api/${
+						import.meta.env.VITE_APIPATH
+				  }/admin/product`
+				: `${import.meta.env.VITE_API}/api/${
+						import.meta.env.VITE_APIPATH
+				  }/admin/product/${this.product.id}`;
 
-      const httpMethod = this.isNew ? "post" : "put";
+			const httpMethod = this.isNew ? "post" : "put";
 
-      this.$http[httpMethod](url, { data: this.product })
-        .then((res) => {
-          alert(res.data.message);
-          this.closeM()
-          this.$emit("update");
-        })
-        .catch((error) => {
-          alert(error.res.data.message);
-        });
-    },
-    newImages() {
-      this.product.imagesUrl = [];
-      this.product.imagesUrl.push("");
-    },
+			this.$http[httpMethod](url, { data: this.product })
+				.then((res) => {
+					alert(res.data.message);
+					this.closeM();
+					this.$emit("update");
+				})
+				.catch((error) => {
+					alert(error.res.data.message);
+				});
+		},
+		newImages() {
+			this.product.imagesUrl = [];
+			this.product.imagesUrl.push("");
+		},
 	},
 	mounted() {
 		this.pModal = new Modal(this.$refs.productModal);
