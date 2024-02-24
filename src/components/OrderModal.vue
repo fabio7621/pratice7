@@ -132,6 +132,7 @@
 						class="btn btn-primary"
 						@click="$emit('update-paid', tempOrder)"
 					>
+						<!-- 把裡面資料丟出去給外層 -->
 						修改付款狀態
 					</button>
 				</div>
@@ -146,12 +147,22 @@ export default {
 	data() {
 		return {
 			orderM: null,
+			tempOrder: {},
 		};
 	},
-	props: ["tempOrder"],
+	props: ["order"],
+	emits: ["update-paid"],
 	methods: {
 		openOderModal() {
 			this.orderM.show();
+		},
+		closeOderModal() {
+			this.orderM.hide();
+		},
+	},
+	watch: {
+		order() {
+			this.tempOrder = this.order; //避免單向數據流利用watch去跟改監控
 		},
 	},
 	mounted() {
