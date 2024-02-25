@@ -206,14 +206,18 @@
 
 <script>
 import { Modal } from "bootstrap";
+import { mapActions } from "pinia";
+import { useToastMessageStore } from "@/stores/toastMessage";
 export default {
 	data() {
 		return {
 			pModal: null,
+			isLoading: false,
 		};
 	},
 	props: ["product", "isNew"], //註記不要再data裡面放跟props一樣的名子
 	methods: {
+		...mapActions(useToastMessageStore, ["pushMessage"]),
 		openM() {
 			this.pModal.show();
 		},
@@ -230,10 +234,11 @@ export default {
 				  }/admin/product/${this.product.id}`;
 
 			const httpMethod = this.isNew ? "post" : "put";
-
+			this.isLoading = true;
 			this.$http[httpMethod](url, { data: this.product })
 				.then((res) => {
 					alert(res.data.message);
+					this.isLoading = false;
 					this.closeM();
 					this.$emit("update");
 				})

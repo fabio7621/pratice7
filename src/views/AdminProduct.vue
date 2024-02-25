@@ -17,6 +17,7 @@
 				</tr>
 			</thead>
 			<tbody>
+				<VueLoading :active="isLoading" :z-index="1060" />
 				<tr v-for="item in products" :key="item.id">
 					<td>{{ item.category }}</td>
 					<td>{{ item.title }}</td>
@@ -64,6 +65,9 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { useToastMessageStore } from "@/stores/toastMessage";
+
 import Pagination from "@/components/Pagination.vue";
 import ProductModal from "@/components/ProductModal.vue";
 import DelModal from "@/components/DelModal.vue";
@@ -76,22 +80,35 @@ export default {
 			},
 			isNew: false,
 			pagination: {},
+			isLoading: false,
 		};
 	},
 	methods: {
+		...mapActions(useToastMessageStore, ["pushMessage"]),
 		getData(page = 1) {
 			const api = `${import.meta.env.VITE_API}/api/${
 				import.meta.env.VITE_APIPATH
 			}/admin/products?page=${page}`;
+			this.isLoading = true;
 			this.$http
 				.get(api)
 				.then((res) => {
 					const { products, pagination } = res.data;
 					this.products = products;
 					this.pagination = pagination;
+					this.isLoading = false;
+					this.pushMessage({
+						style: "success",
+						title: "成功取得產品資訊",
+						content: res.data.message,
+					});
 				})
 				.catch((err) => {
-					alert("找不到資訊");
+					this.pushMessage({
+						style: "danger",
+						title: "取得產品資訊失敗",
+						content: error.response.data.message,
+					});
 				});
 		},
 		openModal(isNew, item) {

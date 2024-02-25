@@ -78,6 +78,9 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { useToastMessageStore } from "@/stores/toastMessage";
+
 import DelModal from "@/components/DelModal.vue";
 import OrderModal from "@/components/OrderModal.vue";
 import Pagination from "@/components/Pagination.vue";
@@ -90,6 +93,7 @@ export default {
 		};
 	},
 	methods: {
+		...mapActions(useToastMessageStore, ["pushMessage"]),
 		getOrder() {
 			const api = `${import.meta.env.VITE_API}api/${
 				import.meta.env.VITE_APIPATH
@@ -137,21 +141,21 @@ export default {
 					this.isLoading = false;
 					this.$refs.ordermodal.closeOderModal();
 
-					// this.pushMessage({
-					// 	style: "success",
-					// 	title: "更新付款狀態",
-					// 	content: response.data.message,
-					// });
+					this.pushMessage({
+						style: "success",
+						title: "更新付款狀態",
+						content: response.data.message,
+					});
 
 					this.getOrder(); //還沒做根據分頁取資料
 				})
 				.catch((error) => {
-					// this.isLoading = false;
-					// this.pushMessage({
-					// 	style: "danger",
-					// 	title: "錯誤訊息",
-					// 	content: error.response.data.message,
-					// });
+					this.isLoading = false;
+					this.pushMessage({
+						style: "danger",
+						title: "錯誤訊息",
+						content: error.response.data.message,
+					});
 				});
 		},
 	},
