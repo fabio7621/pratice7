@@ -1,4 +1,5 @@
 <template>
+	<VueLoading :active="isLoading" :z-index="1060" />
 	<table class="table mt-4">
 		<thead>
 			<tr>
@@ -90,22 +91,31 @@ export default {
 			orders: {},
 			tempOrder: {},
 			pagination: {},
+			isLoading: false,
+			currentPage: 1,
 		};
 	},
 	methods: {
 		...mapActions(useToastMessageStore, ["pushMessage"]),
-		getOrder() {
+		getOrder(currentPage = 1) {
 			const api = `${import.meta.env.VITE_API}api/${
 				import.meta.env.VITE_APIPATH
-			}/admin/orders`;
+			}/admin/orders?page=${currentPage}`;
+			this.isLoading = true;
 			this.$http
 				.get(api)
 				.then((res) => {
 					this.orders = res.data.orders;
 					this.pagination = res.data.pagination;
+					this.isLoading = false;
 				})
-				.catch((err) => {
-					alert("找不到資訊");
+				.catch((error) => {
+					this.pushMessage({
+						style: "danger",
+						title: "錯誤訊息",
+						content: error.response.data.message,
+					});
+					this.isLoading = false;
 				});
 		},
 		openModal(item) {
