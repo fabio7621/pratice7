@@ -1,29 +1,5 @@
-# pratice7
+LV.1 筆記
+https://wonderful-reminder-5bb.notion.site/870b5bf201524764ba8e149bf55c6d6e?pvs=4
+給助教：貼文＆BLog&購物車 部分可以 pass 可能按照練習會再補上來
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+但是我已先交第七週作業為優先,除了 code 裡面有做筆記這邊我統整出重點練習都會寫在這邊
