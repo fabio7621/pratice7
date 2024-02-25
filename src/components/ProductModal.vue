@@ -35,6 +35,25 @@
 								/>
 								<img class="img-fluid" :src="product.imageUrl" />
 							</div>
+							<div class="mb-3">
+								<label for="customFile" class="form-label"
+									>或 上傳圖片
+									<div
+										class="spinner-border m-5"
+										role="status"
+										v-if="status.fileUploading"
+									>
+										<span class="visually-hidden">Loading...</span>
+									</div>
+								</label>
+								<input
+									type="file"
+									id="customFile"
+									class="form-control"
+									ref="fileInput"
+									@change="uploadFile"
+								/>
+							</div>
 							<div v-if="Array.isArray(product.imagesUrl)">
 								<div
 									class="mb-1"
@@ -213,6 +232,10 @@ export default {
 		return {
 			pModal: null,
 			isLoading: false,
+			tempProduct: {},
+			status: {
+				fileUploading: false,
+			},
 		};
 	},
 	props: ["product", "isNew"], //註記不要再data裡面放跟props一樣的名子
@@ -249,6 +272,51 @@ export default {
 		newImages() {
 			this.product.imagesUrl = [];
 			this.product.imagesUrl.push("");
+		},
+		uploadFile() {
+			const uploadedFile = this.$refs.fileInput.files[0];
+			const formData = new FormData();
+			formData.append("file-to-upload", uploadedFile);
+			const url = `${import.meta.env.VITE_API}api/${
+				import.meta.env.VITE_APIPATH
+			}/admin/upload`;
+			this.status.fileUploading = true;
+			this.$http
+				.post(url, formData, {
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				})
+				.then((response) => {
+					this.status.fileUploading = false;
+					this.tempProduct.imageUrl = response.data.imageUrl;
+					this.$refs.fileInput.value = "";
+					this.pushMessage({
+						style: "success",
+						title: "圖片上傳結果",
+						content: response.data.message,
+					});
+				})
+				.catch((error) => {
+					this.status.fileUploading = false;
+					this.pushMessage({
+						style: "danger",
+						title: "圖片上傳結果",
+						content: error.response.data.message,
+					});
+				});
+		},
+	},
+	watch: {
+		//千萬千萬記得傳進來的資料要在data更新增一個容器在watch的時候賦予上去
+		product() {
+			this.tempProduct = this.product;
+			if (!this.tempProduct.imagesUrl) {
+				this.tempProduct.imagesUrl = [];
+			}
+			if (!this.tempProduct.imageUrl) {
+				this.tempProduct.imageUrl = "";
+			}
 		},
 	},
 	mounted() {
